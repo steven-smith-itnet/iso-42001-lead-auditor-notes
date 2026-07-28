@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ISO/IEC 42001 Lead Auditor — Study Notes</title>
+  <meta name="description" content="Original, self-authored study notes for learning ISO/IEC 42001:2023 (Artificial Intelligence Management System / AIMS), organized as a lead-auditor learning path with real-world use cases and reusable templates." />
+  <style>
+    :root{--bg:#0a0f1c;--bg-2:#0e1626;--panel:rgba(255,255,255,0.04);--panel-border:rgba(120,160,220,0.16);--text:#eaf0fb;--text-soft:#a9b7cf;--text-mute:#6f7f9c;--accent:#58a6ff;--accent-2:#7cc4ff;--accent-deep:#1d4ed8;--green:#4ade80;--amber:#fbbf24;--radius:14px;--max:900px;--mono:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;--sans:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif}
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent);text-decoration:none}a:hover{color:var(--accent-2)}
+    code,pre{font-family:var(--mono)}
+    .topbar{position:sticky;top:0;z-index:30;background:rgba(10,15,28,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--panel-border)}
+    .topbar-inner{max-width:var(--max);margin:0 auto;height:58px;padding:0 24px;display:flex;align-items:center;gap:14px}
+    .brand{display:flex;align-items:center;gap:11px;font-weight:600;font-size:.92rem}
+    .brand-badge{width:32px;height:32px;border-radius:8px;background:#fff;color:#16202f;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;letter-spacing:-1px}
+    .brand small{display:block;font-size:.64rem;color:var(--text-mute);font-weight:500;letter-spacing:.04em}
+    .btn{margin-left:auto;display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:9px;font-size:.82rem;font-weight:600;border:1px solid var(--panel-border);color:var(--text-soft)}
+    .btn:hover{color:#fff;background:rgba(255,255,255,.06)}
+    .secnav{position:sticky;top:58px;z-index:20;background:rgba(10,15,28,.75);backdrop-filter:blur(10px);border-bottom:1px solid var(--panel-border);overflow-x:auto}
+    .secnav-inner{max-width:var(--max);margin:0 auto;padding:9px 24px;display:flex;gap:6px;white-space:nowrap}
+    .secnav a{font-size:.76rem;color:var(--text-soft);padding:5px 10px;border-radius:7px;font-weight:500}
+    .secnav a:hover{color:#fff;background:rgba(255,255,255,.06)}
+    .wrap{max-width:var(--max);margin:0 auto;padding:clamp(32px,6vw,56px) 24px 90px}
+    .hero h1{font-size:clamp(1.7rem,4vw,2.5rem);font-weight:700;letter-spacing:-.02em;line-height:1.15}
+    .hero .eyebrow{text-transform:uppercase;letter-spacing:.2em;font-size:.72rem;font-weight:600;color:var(--accent)}
+    .hero p.lede{color:var(--text-soft);font-size:1.05rem;margin-top:14px;max-width:70ch}
+    .hero .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+    .chip{font-size:.74rem;padding:4px 11px;border-radius:999px;background:rgba(88,166,255,.08);border:1px solid var(--panel-border);color:var(--accent-2)}
+    .toc{background:var(--panel);border:1px solid var(--panel-border);border-radius:var(--radius);padding:22px 26px;margin-top:30px}
+    .toc h2{font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-mute);margin-bottom:14px}
+    .toc ol{list-style:none;counter-reset:s;display:grid;gap:8px}
+    .toc li{counter-increment:s;display:flex;gap:12px;align-items:baseline}
+    .toc li::before{content:counter(s,decimal-leading-zero);font-family:var(--mono);font-size:.78rem;color:var(--accent);flex-shrink:0}
+    .toc a{font-weight:600;color:var(--text)}
+    .toc a:hover{color:var(--accent)}
+    .toc span{color:var(--text-mute);font-size:.86rem}
+    section.note{padding-top:48px;margin-top:16px;border-top:1px solid var(--panel-border)}
+    section.note:first-of-type{border-top:none}
+    .sec-num{font-family:var(--mono);font-size:.8rem;color:var(--accent);font-weight:600}
+    section.note h2{font-size:clamp(1.35rem,3vw,1.9rem);font-weight:700;letter-spacing:-.01em;margin:6px 0 4px}
+    section.note>p.sub{color:var(--text-soft);margin-bottom:6px}
+    h3{font-size:1.05rem;font-weight:650;margin:26px 0 8px;color:var(--text)}
+    p{margin:10px 0;color:#d4deef}
+    ul,ol.list{margin:10px 0 10px 4px;padding-left:20px}
+    li{margin:6px 0;color:#d4deef}
+    strong{color:#fff}
+    em{color:var(--accent-2);font-style:normal}
+    .term{color:var(--accent-2);font-weight:600}
+    .callout{border-radius:12px;padding:16px 18px;margin:20px 0;border:1px solid var(--panel-border)}
+    .callout .lbl{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;font-weight:700;display:flex;align-items:center;gap:7px;margin-bottom:8px}
+    .callout p{margin:6px 0}
+    .use{background:rgba(88,166,255,.06);border-color:rgba(88,166,255,.28)}
+    .use .lbl{color:var(--accent)}
+    .tmpl{background:rgba(74,222,128,.05);border-color:rgba(74,222,128,.22)}
+    .tmpl .lbl{color:#86efac}
+    .key{background:rgba(251,191,36,.06);border-color:rgba(251,191,36,.25)}
+    .key .lbl{color:var(--amber)}
+    pre{background:rgba(0,0,0,.3);border:1px solid var(--panel-border);border-radius:10px;padding:14px 16px;overflow-x:auto;font-size:.8rem;line-height:1.55;color:#cdd9ec;margin:8px 0}
+    .tbl{overflow-x:auto;border:1px solid var(--panel-border);border-radius:12px;margin:14px 0}
+    table{width:100%;border-collapse:collapse;min-width:520px}
+    th{text-align:left;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text-mute);padding:10px 13px;border-bottom:1px solid var(--panel-border);background:rgba(255,255,255,.02)}
+    td{padding:10px 13px;font-size:.85rem;border-bottom:1px solid rgba(255,255,255,.05);color:var(--text-soft);vertical-align:top}
+    tr:last-child td{border-bottom:none}
+    td code,td .id{font-family:var(--mono);font-size:.8rem;color:var(--accent-2)}
+    .new{font-size:.62rem;font-weight:700;color:#86efac;background:rgba(74,222,128,.14);padding:1px 6px;border-radius:5px;margin-left:6px;letter-spacing:.03em}
+    .cols{columns:2;column-gap:26px}
+    .cols li{break-inside:avoid;font-size:.85rem;color:var(--text-soft)}
+    .cols .id{font-family:var(--mono);color:var(--accent-2);margin-right:5px}
+    @media(max-width:640px){.cols{columns:1}table{min-width:420px}}
+    .foot{margin-top:56px;padding:20px;border:1px dashed var(--panel-border);border-radius:10px;font-size:.82rem;color:var(--text-mute)}
+    .foot a{color:var(--accent)}
+  </style>
+</head>
+<body>
+  <header class="topbar"><div class="topbar-inner">
+    <span class="brand"><span class="brand-badge"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16202f" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="9" width="14" height="10" rx="2.5"/><path d="M12 5V9"/><circle cx="12" cy="3.5" r="1.5"/><path d="M9 13h.01M15 13h.01"/><path d="M3 12v3M21 12v3"/></svg></span><span>ISO 42001<small>Study Notes · AIMS</small></span></span>
+    <a class="btn" id="repo-link" href="#" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+  </div></header>
+
+  <nav class="secnav"><div class="secnav-inner">
+    <a href="#s1">01 Fundamentals</a><a href="#s2">02 The AIMS</a><a href="#s3">03 Clause Spine</a><a href="#s4">04 Annex A</a><a href="#s5">05 Risk, AIA &amp; SoA</a><a href="#s6">06 Supporting Standards</a><a href="#s7">07 Lead Auditor Path</a><a href="#s8">08 The Audit</a>
+  </div></nav>
+
+  <main class="wrap">
+    <div class="hero">
+      <span class="eyebrow">Self-authored learning project</span>
+      <h1>ISO/IEC 42001 Lead Auditor — Study Notes</h1>
+      <p class="lede">My working notes from learning to audit an <strong>Artificial Intelligence Management System (AIMS)</strong> against ISO/IEC 42001:2023 — the world's first AI management-system standard — written in my own words as I studied, and paired with real-world use cases and reusable templates I built along the way. Organized as a lead-auditor learning path, from ISO fundamentals through conducting a certification audit of the AI a company builds and the AI it merely uses.</p>
+      <div class="meta"><span class="chip">ISO/IEC 42001:2023</span><span class="chip">AIMS</span><span class="chip">Annex A · 38 controls</span><span class="chip">AI Impact Assessment</span><span class="chip">Lead Auditor</span><span class="chip">ISO 19011 · 42006</span></div>
+    </div>
+
+    <div class="toc">
+      <h2>Learning path</h2>
+      <ol>
+        <li><a href="#s1">ISO Fundamentals ("The Basics")</a><br><span>How standards work, certification vs. accreditation, the audit cycle, normative vs. informative criteria — and why the Annex SL spine means 27001 knowledge transfers.</span></li>
+        <li><a href="#s2">ISO 42001 &amp; the AIMS</a><br><span>The first AI management-system standard, the organization's role (provider vs. user), and how it integrates with 27001, 27701 and 9001.</span></li>
+        <li><a href="#s3">The Clause Spine (4–10)</a><br><span>The auditable requirements in clause order with an AI lens, and the two homes of the AI system impact assessment.</span></li>
+        <li><a href="#s4">Annex A Controls</a><br><span>38 controls in nine objectives (A.2–A.10), and the role of Annexes B, C and D.</span></li>
+        <li><a href="#s5">AI Risk, the Impact Assessment &amp; the SoA</a><br><span>Risk to people and society, the AI system impact assessment as the AI-specific centerpiece, and how the SoA ties controls to risk.</span></li>
+        <li><a href="#s6">Supporting Standards</a><br><span>22989, 23894, 42005, 42006, 5259, 19011, 17021-1 — what each is for.</span></li>
+        <li><a href="#s7">The Lead Auditor Path</a><br><span>Training vs. certification, grades, and the AI-specific competence an AIMS auditor needs.</span></li>
+        <li><a href="#s8">The Audit</a><br><span>Order of operations, nonconformity classification, and the common AI hot-spots.</span></li>
+      </ol>
+    </div>
+
+    <!-- 01 -->
+    <section class="note" id="s1">
+      <span class="sec-num">SECTION 01</span>
+      <h2>ISO Fundamentals — "The Basics"</h2>
+      <p class="sub">Before auditing any standard, I needed the mechanics of how ISO standards, certification, and audits actually work. Because 42001 uses the same harmonized structure as 27001, this foundation transfers almost intact.</p>
+
+      <h3>How standards get made</h3>
+      <p>International standards are written by technical committees of subject-matter experts from industry, government, and academia. AI standards come from the joint committee for information technology (JTC 1) and its subcommittee for <em>artificial intelligence</em>, <strong>SC 42</strong> — the same committee that produced the AI vocabulary (22989) and AI risk-management guidance (23894). Every modern management-system standard shares the same Plan‑Do‑Check‑Act rhythm and the same clause skeleton, so the effort I spent learning 27001's spine transferred directly to 42001; only the discipline on top is new.</p>
+
+      <h3>Certification vs. accreditation</h3>
+      <ul>
+        <li><span class="term">Certification</span> — a <strong>certification body (CB)</strong> checks that <em>an organization's AIMS</em> conforms to 42001 and issues the certificate.</li>
+        <li><span class="term">Accreditation</span> — an <strong>accreditation body (AB)</strong> checks that <em>the CB itself</em> is competent to run those audits. For an AIMS the governing document is <strong>ISO/IEC 42006</strong> (the AI analogue of 27006), read alongside 17021‑1.</li>
+      </ul>
+      <p>The chain of trust is AB → CB → organization, and ISO itself certifies no one. Accredited certificates are recognized internationally through the IAF's mutual‑recognition arrangement; an unaccredited certificate can be rejected by a customer, forcing a costly re‑audit. Because AIMS is the newest discipline, the accreditation infrastructure under 42006 matured through 2024–2026.</p>
+
+      <h3>The multi-year audit cycle</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Phase</th><th>What happens</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Stage 1</strong> (initial)</td><td>Readiness / documentation review — is the AIMS <em>designed</em>? Scope, AI policy, AI risk assessment, the AI system inventory, the impact assessments, and the Statement of Applicability. Findings here are usually <strong>areas of concern</strong>, not nonconformities.</td></tr>
+          <tr><td><strong>Stage 2</strong> (initial)</td><td>Is the AIMS <em>implemented and effective</em>? Evidence, interviews, sampling across the AI lifecycle. Passing both stages earns a 3-year certificate.</td></tr>
+          <tr><td><strong>Surveillance</strong> (Yr 1 &amp; 2)</td><td>Annual checks (partial scope) that conformity is maintained as models and data change.</td></tr>
+          <tr><td><strong>Recertification</strong> (Yr 3)</td><td>A whole-AIMS reassessment before the certificate expires; a pass renews it for another three years.</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3>Findings: getting the language right</h3>
+      <ul>
+        <li><span class="term">Nonconformity (NC)</span> — a requirement isn't met. <strong>Minor</strong> = an isolated lapse that doesn't undermine the system; <strong>Major</strong> = a gap that raises significant doubt the AIMS can govern AI responsibly (or the total absence of a required process).</li>
+        <li><span class="term">Correction</span> fixes the immediate symptom; <span class="term">corrective action</span> removes the root cause so it can't recur. Auditors review the planned corrective action before any certification decision.</li>
+        <li><span class="term">Opportunity for Improvement (OFI)</span> — not a nonconformity; a weakness that could become one, recorded separately.</li>
+      </ul>
+
+      <h3>Normative vs. informative — the auditor's compass</h3>
+      <p>The single most important distinction for an auditor. <span class="term">Normative</span> criteria are mandatory (the word <strong>"shall"</strong>) — the only thing you can raise a nonconformity against. In 42001, only <em>Clauses 4–10</em> and the applicable Annex A controls carry "shall"; the Introduction, Scope, Normative references, and Terms are non‑auditable context, and Annexes B, C and D are informative guidance. <span class="term">Informative</span> material (notes, companion standards, "should") supports implementation but can't be cited as a finding.</p>
+
+      <div class="callout use"><div class="lbl">▹ Use case</div><p>A vendor claims a "42001 certificate" issued by a body with no visible accreditation. I'd treat it like any unaccredited claim — confirm the CB's accreditation status under 42006/17021‑1 before relying on it, and be ready to schedule a proper Stage 1 rather than accept the paper.</p></div>
+      <div class="callout tmpl"><div class="lbl">▤ Template — 3-year cycle planner</div>
+        <pre>| Cycle Yr | Audit type            | Focus                              | Target month |
+|----------|-----------------------|------------------------------------|--------------|
+| 1        | Stage 1 (design)      | Scope, AI policy, risk, AIA, SoA   | 2026-03      |
+| 1        | Stage 2 (effective)   | Lifecycle evidence + AIAs          | 2026-05      |
+| 2        | Surveillance 1        | Monitoring, drift, NCs closed      | 2027-05      |
+| 3        | Surveillance 2        | New/changed AI systems, incidents  | 2028-05      |
+| 3        | Recertification       | Whole-AIMS reassessment            | 2029-03      |</pre></div>
+    </section>
+
+    <!-- 02 -->
+    <section class="note" id="s2">
+      <span class="sec-num">SECTION 02</span>
+      <h2>ISO 42001 &amp; the AIMS</h2>
+      <p class="sub">What the standard is, why the organization's role changes what you audit, and how it plugs into the wider management-system world.</p>
+
+      <h3>The core idea</h3>
+      <p>ISO/IEC 42001, published in <strong>December 2023</strong>, is the <em>world's first</em> standard for an <span class="term">Artificial Intelligence Management System</span> — a risk-based governance framework for developing, providing, and using AI responsibly and trustworthily. It applies to <strong>any organization that develops, provides, or uses AI systems</strong>, regardless of sector or size. It uses the <strong>harmonized structure (Annex SL)</strong> shared by every modern ISO management standard, which is why once you know the clause spine from 27001, most of it transfers. Crucially, it is <em>not a technical conformity test of a model</em> — it audits the management system that governs AI across its lifecycle.</p>
+
+      <h3>The organization's role decides what you audit</h3>
+      <p>This is the pivot that has no equivalent in 27001. An organization applies the AIMS to the <strong>role</strong> it plays toward each AI system:</p>
+      <ul>
+        <li><span class="term">AI provider / producer</span> — develops or supplies the AI. The audit leans on the design/development lifecycle (A.6), data governance (A.7), and documentation for downstream users (A.8).</li>
+        <li><span class="term">AI user / deployer</span> — uses AI in its operations. The audit leans on responsible-use processes (A.9), intended-use boundaries, human oversight, and third-party/supplier management (A.10).</li>
+        <li><span class="term">Both</span> — most real organizations. The auditor confirms the role determination itself is documented, because it drives which controls are applicable in the SoA.</li>
+      </ul>
+
+      <h3>How it integrates with other standards</h3>
+      <ul>
+        <li><strong>27001</strong> (information security) — protects the systems and data the AI runs on; an AIMS often sits on top of an existing ISMS.</li>
+        <li><strong>27701</strong> (privacy) — governs the PII used to train and run AI; where personal data feeds a model, the two overlap heavily.</li>
+        <li><strong>9001</strong> (quality) — the quality-management discipline behind repeatable AI processes.</li>
+      </ul>
+      <p>Because all four share the Annex SL spine, they can be audited as an integrated management system.</p>
+
+      <h3>The regulatory tailwind</h3>
+      <p>42001 is becoming the recognized way to <em>demonstrate</em> responsible-AI governance and to prepare for regulation. The <strong>EU AI Act</strong> and the <strong>NIST AI RMF</strong> point in the same direction — but for the auditor these are <em>context and alignment</em>, not audit criteria, unless a specific legal/regulatory requirement is pulled into the audit criteria for a given engagement.</p>
+
+      <div class="callout key"><div class="lbl">◆ Auditor takeaway</div><p>Keep "the standard" and "certification" straight, and always pin the <em>role</em>: 42001 states requirements; a CB (accredited under 42006) audits an organization's AIMS against them and, if conforming, issues a certificate valid for a three-year cycle. What is applicable depends on whether the org builds AI, uses AI, or both — establish that first.</p></div>
+
+      <div class="callout use"><div class="lbl">▹ Use case</div><p>A company buys a foundation model and fine-tunes it for hiring screening. It is a <em>user</em> of the base model but a <em>provider</em> of the derived system — so its AIMS must cover both third-party/supplier controls (A.10) <em>and</em> its own development, impact assessment, and monitoring. I confirm the role split is written down before scoping the sample.</p></div>
+      <div class="callout tmpl"><div class="lbl">▤ Template — AIMS scope statement skeleton</div>
+        <pre>The AIMS covers [AI systems / products / business units] delivered from
+[sites/locations], across the lifecycle stages [design, deployment, operation]
+in scope, and the [teams, processes] that govern them.
+
+Role(s) toward AI: [provider / user / both], stated per system.
+Boundaries &amp; interfaces: [foundation-model &amp; data suppliers, integrations,
+outsourced processes] and how their risks are controlled.
+Exclusions &amp; justification: [what's out of scope and why].
+Applicable requirements: [legal, regulatory (e.g., EU AI Act), contractual].
+The scope is maintained as documented information.</pre></div>
+    </section>
+
+    <!-- 03 -->
+    <section class="note" id="s3">
+      <span class="sec-num">SECTION 03</span>
+      <h2>The Clause Spine (4–10)</h2>
+      <p class="sub">Clauses 4 through 10 are where every "shall" lives — the auditable heart of the standard. The spine matches 27001, but the evidence wears an AI lens. Items an auditor expects as retained documented information are marked <span class="term">[DI]</span>.</p>
+
+      <div class="tbl"><table>
+        <thead><tr><th>Clause</th><th>Theme</th><th>What an auditor looks for — AI lens</th></tr></thead>
+        <tbody>
+          <tr><td><code>4</code></td><td>Context</td><td>Internal/external issues relevant to the AIMS and a documented determination of the organization's <strong>role(s)</strong> toward AI (4.1); interested parties incl. AI-affected individuals and society (4.2); a documented, justified scope <strong>[DI]</strong> naming which AI systems and lifecycle stages are covered (4.3); an AIMS that actually operates (4.4).</td></tr>
+          <tr><td><code>5</code></td><td>Leadership</td><td>Visible top-management commitment and accountability for AI outcomes (5.1); an approved, communicated <strong>AI policy [DI]</strong> (5.2); assigned roles, responsibilities &amp; authorities — who signs off on AI risk and impact (5.3).</td></tr>
+          <tr><td><code>6</code></td><td>Planning</td><td>Risks &amp; opportunities (6.1.1); a documented <strong>AI risk assessment process [DI]</strong> that considers harms to people and society, not just the org (6.1.2); AI risk treatment + the <strong>SoA [DI]</strong> (6.1.3); the <strong>AI system impact-assessment process [DI]</strong> (6.1.4); measurable AI objectives <strong>[DI]</strong> (6.2); planning of changes (6.3).</td></tr>
+          <tr><td><code>7</code></td><td>Support</td><td>Resources (7.1); AI competence — data science + ethics + risk <strong>[DI]</strong> (7.2); awareness (7.3); communication (7.4); creating &amp; controlling documented information <strong>[DI]</strong> (7.5).</td></tr>
+          <tr><td><code>8</code></td><td>Operation</td><td>Operational planning &amp; control of AI processes incl. outsourced/third-party AI <strong>[DI]</strong> (8.1); the <strong>AI risk assessment performed</strong> on schedule/on change <strong>[DI]</strong> (8.2); the <strong>AI risk treatment implemented [DI]</strong> (8.3); the <strong>AI system impact assessment performed [DI]</strong>, proportionate to risk (8.4).</td></tr>
+          <tr><td><code>9</code></td><td>Performance evaluation</td><td>Monitoring &amp; measurement — incl. model drift and incident metrics — that is actually evaluated <strong>[DI]</strong> (9.1); internal audit covering the full AIMS scope <strong>[DI]</strong> (9.2); management review with the required inputs and documented decisions <strong>[DI]</strong> (9.3).</td></tr>
+          <tr><td><code>10</code></td><td>Improvement</td><td>Continual improvement (10.1); nonconformity &amp; corrective action — including handling of AI incidents <strong>[DI]</strong> (10.2).</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="callout key"><div class="lbl">◆ The two homes of the AI system impact assessment</div><p>The AI system impact assessment (AIA) appears <strong>twice</strong> in the spine. <strong>6.1.4</strong> requires you to <em>establish the process</em>; <strong>8.4</strong> requires you to <em>perform it</em>. An auditor confirms both — a defined AIA method <em>and</em> completed assessments, each proportionate to that system's risk to individuals, groups and society. Finding one without the other is a classic gap.</p></div>
+
+      <div class="callout use"><div class="lbl">▹ Use case</div><p>On a Stage 1, I walk the spine top-to-bottom and build an evidence map: for each "shall," which document or record proves it. The AI-specific rows — 6.1.4/8.4 (AIA) and 6.1.2/8.2 (AI risk) — get extra attention because they have no ISMS equivalent and are where design-stage gaps hide.</p></div>
+      <div class="callout tmpl"><div class="lbl">▤ Template — clause-to-evidence map</div>
+        <pre>| Clause | Requirement (short)             | Documented info? | Evidence located | Gap? |
+|--------|---------------------------------|------------------|------------------|------|
+| 4.3    | AIMS scope + role determination | [DI]             | Scope v2         | No   |
+| 6.1.3  | AI risk treatment + SoA         | [DI]             | SoA v3           | No   |
+| 6.1.4  | AIA process defined             | [DI]             | AIA-PROC v1      | No   |
+| 8.4    | AIAs performed per system       | [DI]             | AIA-HIRE, AIA-CS | No   |
+| 9.1    | Model monitoring / drift        | [DI]             | Monitor dash Q2  | No   |</pre></div>
+    </section>
+
+    <!-- 04 -->
+    <section class="note" id="s4">
+      <span class="sec-num">SECTION 04</span>
+      <h2>Annex A Controls — 38 in nine objectives</h2>
+      <p class="sub">Annex A is a <em>reference</em> set of 38 controls an organization considers when treating AI risk. Every control appears in the SoA with a decision to apply or exclude, and a justification. The identifiers run A.2 through A.10 (A.1 is the introduction), so control numbering starts at <code>.2</code> within each objective.</p>
+
+      <h3>The role of Annexes B, C and D</h3>
+      <p><span class="term">Annex A</span> lists the controls; <span class="term">Annex B</span> gives implementation guidance for each; <span class="term">Annex C</span> lists potential AI-related organizational objectives and risk sources (useful input to the risk assessment); and <span class="term">Annex D</span> covers applying the AIMS across domains and sectors. Only Annex A is normative — B, C and D are informative, so I use them to interpret intent, never to raise a finding.</p>
+
+      <h3>A.2 Policies related to AI (3)</h3>
+      <ul class="cols">
+        <li><span class="id">A.2.2</span>AI policy</li><li><span class="id">A.2.3</span>Alignment with other organizational policies</li><li><span class="id">A.2.4</span>Review of the AI policy</li>
+      </ul>
+
+      <h3>A.3 Internal organization (2)</h3>
+      <ul class="cols">
+        <li><span class="id">A.3.2</span>AI roles &amp; responsibilities</li><li><span class="id">A.3.3</span>Reporting of concerns</li>
+      </ul>
+
+      <h3>A.4 Resources for AI systems (5)</h3>
+      <ul class="cols">
+        <li><span class="id">A.4.2</span>Resource documentation</li><li><span class="id">A.4.3</span>Data resources</li><li><span class="id">A.4.4</span>Tooling resources</li><li><span class="id">A.4.5</span>System &amp; computing resources</li><li><span class="id">A.4.6</span>Human resources</li>
+      </ul>
+
+      <h3>A.5 Assessing impacts of AI systems (4)</h3>
+      <ul class="cols">
+        <li><span class="id">A.5.2</span>AI system impact assessment process</li><li><span class="id">A.5.3</span>Documentation of AI system impact assessments</li><li><span class="id">A.5.4</span>Assessing AI system impact on individuals or groups</li><li><span class="id">A.5.5</span>Assessing societal impacts of AI systems</li>
+      </ul>
+
+      <h3>A.6 AI system life cycle (9)</h3>
+      <ul class="cols">
+        <li><span class="id">A.6.1.2</span>Objectives for responsible development</li><li><span class="id">A.6.1.3</span>Processes for responsible design &amp; development</li><li><span class="id">A.6.2.2</span>AI system requirements &amp; specification</li><li><span class="id">A.6.2.3</span>Documentation of AI system design &amp; development</li><li><span class="id">A.6.2.4</span>AI system verification &amp; validation</li><li><span class="id">A.6.2.5</span>AI system deployment</li><li><span class="id">A.6.2.6</span>AI system operation &amp; monitoring</li><li><span class="id">A.6.2.7</span>AI system technical documentation</li><li><span class="id">A.6.2.8</span>AI system recording of event logs</li>
+      </ul>
+
+      <h3>A.7 Data for AI systems (5)</h3>
+      <ul class="cols">
+        <li><span class="id">A.7.2</span>Data for development &amp; enhancement</li><li><span class="id">A.7.3</span>Acquisition of data</li><li><span class="id">A.7.4</span>Quality of data for AI systems</li><li><span class="id">A.7.5</span>Data provenance</li><li><span class="id">A.7.6</span>Data preparation</li>
+      </ul>
+
+      <h3>A.8 Information for interested parties (4)</h3>
+      <ul class="cols">
+        <li><span class="id">A.8.2</span>System documentation &amp; information for users</li><li><span class="id">A.8.3</span>External reporting</li><li><span class="id">A.8.4</span>Communication of incidents</li><li><span class="id">A.8.5</span>Information for interested parties</li>
+      </ul>
+
+      <h3>A.9 Use of AI systems (3)</h3>
+      <ul class="cols">
+        <li><span class="id">A.9.2</span>Processes for responsible use</li><li><span class="id">A.9.3</span>Objectives for responsible use</li><li><span class="id">A.9.4</span>Intended use of the AI system</li>
+      </ul>
+
+      <h3>A.10 Third-party &amp; customer relationships (3)</h3>
+      <ul class="cols">
+        <li><span class="id">A.10.2</span>Allocation of responsibilities</li><li><span class="id">A.10.3</span>Suppliers</li><li><span class="id">A.10.4</span>Customers</li>
+      </ul>
+
+      <div class="callout use"><div class="lbl">▹ Use case</div><p>A pure <em>deployer</em> that only buys AI marks much of A.6 (development lifecycle) "not applicable — we do not develop AI." Reasonable — but only if the SoA justifies it against the role determination, and A.9 (responsible use), A.8 (information from the vendor), and A.10 (supplier obligations) are genuinely applied and evidenced. That justification is exactly what I verify.</p></div>
+      <div class="callout tmpl"><div class="lbl">▤ Template — Annex A objective cheat-sheet</div>
+        <pre>Objective                              | Ct | Auditor focus
+A.2  Policies related to AI            |  3 | AI policy, alignment, review
+A.3  Internal organization             |  2 | Accountability, raising concerns
+A.4  Resources for AI systems          |  5 | Data, tooling, compute, people
+A.5  Assessing impacts                  |  4 | AIA process + individual/societal impact
+A.6  AI system life cycle              |  9 | Responsible dev, V&amp;V, deploy, monitor
+A.7  Data for AI systems               |  5 | Provenance, quality, preparation
+A.8  Information for interested parties |  4 | User docs, incident comms, reporting
+A.9  Use of AI systems                 |  3 | Responsible &amp; intended use
+A.10 Third-party &amp; customer            |  3 | Responsibilities, suppliers, customers
+Total: 38 controls (A.2–A.10)</pre></div>
+    </section>
+
+    <!-- 05 -->
+    <section class="note" id="s5">
+      <span class="sec-num">SECTION 05</span>
+      <h2>AI Risk, the Impact Assessment &amp; the SoA</h2>
+      <p class="sub">42001 is a risk-based standard, but the AI difference is <em>who</em> the risk is about. The control set flows from AI risk; the impact assessment is the AI-specific centerpiece; and the SoA records the reasoning.</p>
+
+      <h3>AI risk assessment (6.1.2) — beyond the org</h3>
+      <p>The organization defines and applies a documented, repeatable risk process. The key departure from an ISMS: AI risk must consider harms not only to the organization but to <strong>individuals, groups, and society</strong> — bias, safety, exclusion, loss of autonomy, misinformation. ISO/IEC 23894 is the companion guidance I benchmark this process against. Risk criteria, consistent method, identified risks, and risk owners all still apply.</p>
+
+      <h3>The AI system impact assessment (AIA) — the centerpiece</h3>
+      <p>The <span class="term">AI system impact assessment</span> is the artifact with no ISMS equivalent, and the thing an AIMS audit turns on. It lives in two clauses — <strong>6.1.4</strong> (establish the process) and <strong>8.4</strong> (perform it) — and is mirrored in Annex A control objective A.5. Companion standard <strong>ISO/IEC 42005</strong> is my benchmark for its depth and content. An AIA describes the system and its intended use, identifies affected individuals and groups, analyses potential harms (bias, safety, privacy, societal), rates likelihood and severity, and records mitigations, human oversight, and residual impact. It is <em>required where AI could affect people</em> and its depth is <strong>proportionate to risk</strong> — a low-stakes internal tool needs less than an automated decision affecting someone's job or credit.</p>
+
+      <h3>Risk treatment &amp; the SoA (6.1.3)</h3>
+      <p>For each risk, select treatment options and determine the controls needed, then compare against Annex A to check nothing necessary was missed. The <span class="term">Statement of Applicability</span> records, for every Annex A control: whether it's necessary (and why), whether it's implemented, and — for anything excluded — the justification, tied back to the organization's role. Risk owners approve the treatment plan and accept residual risk.</p>
+
+      <div class="callout key"><div class="lbl">◆ Auditor tests on the SoA and AIAs</div><p><strong>SoA:</strong> (1) consistent with the risk treatment plan and the role determination? (2) every inclusion/exclusion justified and traceable to AI risk or a legal driver? (3) does the claimed status hold up in evidence? <strong>AIAs:</strong> (4) is the <em>process</em> defined (6.1.4)? (5) are assessments actually <em>performed</em> (8.4) for the systems that need them? (6) do they cover harms to individuals <em>and</em> society, with human oversight and residual sign-off?</p></div>
+
+      <div class="callout use"><div class="lbl">▹ Use case</div><p>An SoA marks A.5 "applicable / implemented," but only one of five in-scope AI systems has a completed AIA, and that one never assesses societal impact. The inconsistency between risk → AIA process → performed assessment → evidence is a textbook audit trail — usually a nonconformity graded on how central the missing system is.</p></div>
+      <div class="callout tmpl"><div class="lbl">▤ Template — AI risk register + AIA snippet</div>
+        <pre>AI RISK REGISTER
+| Risk ID | AI system   | Harm to whom      | L | S | Score | Owner | Treatment | Residual |
+| AR-001  | Hiring model| Applicants (bias) | 4 | 5 |  20   | Head AI| Mitigate |    8     |
+
+AI SYSTEM IMPACT ASSESSMENT (extract)
+System        : Resume-screening model (provider + user)
+Intended use  : Rank applicants for recruiter review (human-in-the-loop)
+Affected      : Job applicants, incl. protected groups
+Potential harm: Disparate impact / unfair exclusion
+Likelihood/Sev: Medium / High
+Mitigations   : Bias testing per hiring cycle; feature review; adverse-impact ratio
+Human oversight: Recruiter decides; model advisory only
+Residual      : Low-Medium — accepted by Head of AI, 2026-05</pre></div>
+    </section>
+
+    <!-- 06 -->
+    <section class="note" id="s6">
+      <span class="sec-num">SECTION 06</span>
+      <h2>Supporting Standards</h2>
+      <p class="sub">A lead auditor is expected to know the family and the distinct job each document does. The audit criteria are 42001 + the SoA + applicable legal/regulatory requirements; the rest are guidance you cite, not certify against.</p>
+
+      <div class="tbl"><table>
+        <thead><tr><th>Standard</th><th>Role</th><th>How an auditor uses it</th></tr></thead>
+        <tbody>
+          <tr><td><span class="id">22989</span></td><td>AI concepts &amp; terminology</td><td>The vocabulary of AI — the definitions you rely on.</td></tr>
+          <tr><td><span class="id">23053</span></td><td>Framework for ML systems</td><td>Understand the structure of a machine-learning system.</td></tr>
+          <tr><td><span class="id">23894:2023</span></td><td>AI risk management</td><td>Key companion — benchmark for the 6.1.2 / 8.2 AI risk process.</td></tr>
+          <tr><td><span class="id">42005</span></td><td>AI system impact assessment</td><td>Benchmark for AIA depth and content (6.1.4 / 8.4).</td></tr>
+          <tr><td><span class="id">42006</span></td><td>Requirements for CBs (AIMS)</td><td>Basis of accredited AIMS certification; audit-time rules.</td></tr>
+          <tr><td><span class="id">5259 series</span></td><td>Data quality for analytics/ML</td><td>Evaluate the data-quality controls under A.7.</td></tr>
+          <tr><td><span class="id">24028</span></td><td>Overview of trustworthiness in AI</td><td>Trustworthiness concepts and terminology.</td></tr>
+          <tr><td><span class="id">24029</span></td><td>Robustness of neural networks</td><td>Assess robustness claims for ML components.</td></tr>
+          <tr><td><span class="id">TR 24027</span></td><td>Bias in AI systems</td><td>Assess bias/fairness treatment and testing.</td></tr>
+          <tr><td><span class="id">38507</span></td><td>Governance implications of AI</td><td>The board/governance view of AI.</td></tr>
+          <tr><td><span class="id">31000</span></td><td>Risk management — guidelines</td><td>General risk vocabulary underpinning AI risk.</td></tr>
+          <tr><td><span class="id">19011</span></td><td>Auditing management systems</td><td>The generic auditing playbook: principles, programme, competence.</td></tr>
+          <tr><td><span class="id">17021-1</span></td><td>Requirements for MS certification bodies</td><td>Rules third-party CBs and auditors must follow.</td></tr>
+        </tbody>
+      </table></div>
+      <p class="sub" style="font-size:.85rem;color:var(--text-mute)">The <strong>EU AI Act</strong> and <strong>NIST AI RMF</strong> sit alongside these as context and alignment — frequently referenced, but not audit criteria unless a specific requirement is pulled into the criteria for an engagement.</p>
+
+      <h3>19011 vs 17021-1 — a classic distinction</h3>
+      <p>ISO 19011 gives <em>guidance</em> for auditing management systems and applies to all auditors (internal/first-party, second-party). ISO/IEC 17021-1 states <em>requirements</em> for bodies performing third-party certification — impartiality, competence, and the certification process — and for an AIMS is read with the AI-specific 42006. For certification audits, 17021-1/42006 requirements take precedence; 19011 is still used for guidance.</p>
+
+      <div class="callout use"><div class="lbl">▹ Use case</div><p>Asked "which standard governs your internal audit?" I answer 19011 (guidance) — but for the CB's external AIMS audit, 17021-1 plus 42006 set the rules. Knowing which hat applies keeps findings and expectations correct.</p></div>
+      <div class="callout tmpl"><div class="lbl">▤ Template — supporting-standards quick card</div>
+        <pre>Criteria I certify against : 42001 + SoA + legal/regulatory
+Guidance I interpret with   : 22989 (terms), 23894 (AI risk), 42005 (AIA), 5259 (data)
+Rules governing the CB      : 17021-1 + 42006
+Auditing playbook           : 19011 (guidance), 17021-1 (requirements)
+Context, not criteria       : EU AI Act, NIST AI RMF</pre></div>
+    </section>
+
+    <!-- 07 -->
+    <section class="note" id="s7">
+      <span class="sec-num">SECTION 07</span>
+      <h2>The Lead Auditor Path</h2>
+      <p class="sub">Two things get conflated: the <em>training course</em> (knowledge + exam) and the <em>personnel certification</em> (independent proof of competence and logged audit experience). AIMS is the newest of the three disciplines, so most AIMS lead auditors bring an existing 27001 credential plus AI/ML literacy.</p>
+
+      <h3>Training vs. certification</h3>
+      <ul>
+        <li><span class="term">Accredited training</span> — the Lead Auditor course is typically a 5-day accredited course ending in an exam; the training certificate is generally valid for around three years.</li>
+        <li><span class="term">Personnel certification / registration</span> — accredited schemes certify <em>people</em> against a competency model aligned to ISO 19011, in grades, each requiring more logged audit experience, maintained through CPD and periodic renewal. The CB itself is accredited under ISO/IEC 42006.</li>
+      </ul>
+
+      <h3>A typical 5-day Lead Auditor course</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Day</th><th>Focus</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Day 1</strong></td><td>Introduction to the AIMS and ISO/IEC 42001 — structure, roles, key concepts.</td></tr>
+          <tr><td><strong>Day 2</strong></td><td>Audit principles and preparation / initiation of the audit.</td></tr>
+          <tr><td><strong>Day 3</strong></td><td>On-site audit activities — evidence, interviews, sampling the AI lifecycle.</td></tr>
+          <tr><td><strong>Day 4</strong></td><td>Closing the audit — findings, nonconformities, reporting.</td></tr>
+          <tr><td><strong>Day 5</strong></td><td>Certification exam.</td></tr>
+        </tbody>
+      </table></div>
+      <p>The exam commonly spans <strong>seven domains</strong>: AI management-system fundamentals; AIMS requirements; audit concepts &amp; principles; preparing a 42001 audit; conducting the audit; closing the audit; and managing an audit programme.</p>
+
+      <h3>Personnel certification grades</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Grade (typical)</th><th>Professional experience</th><th>Audit experience</th></tr></thead>
+        <tbody>
+          <tr><td>Provisional / Trainee</td><td>None required</td><td>Course + exam passed; no audits yet</td></tr>
+          <tr><td>Auditor</td><td>~2 yrs total (≥1 in AI)</td><td>~200 audit hours as team member</td></tr>
+          <tr><td>Lead Auditor</td><td>~5 yrs total (≥2 in AI)</td><td>~300 audit hours incl. leading audits</td></tr>
+          <tr><td>Senior / Principal</td><td>~10 yrs total (mostly AI)</td><td>1,000+ hours; sustained lead role</td></tr>
+        </tbody>
+      </table></div>
+      <p class="sub" style="font-size:.85rem;color:var(--text-mute)">Thresholds vary by scheme and change over time — always confirm against the current scheme documents. Because AIMS is young, "AI experience" is often satisfied through demonstrable AI/ML literacy alongside an existing management-system credential.</p>
+
+      <h3>The AI-specific competence an AIMS auditor needs</h3>
+      <p>Beyond the generic ISO 19011 model — personal behaviours, audit principles/methods, management-system knowledge, team-leadership — an AIMS auditor additionally needs:</p>
+      <ul>
+        <li><strong>AI/ML fundamentals &amp; the lifecycle</strong> — inception → design → V&amp;V → deployment → operation/monitoring → retirement.</li>
+        <li><strong>AI risk &amp; the AIA</strong> — how to judge an impact assessment's depth and coverage.</li>
+        <li><strong>Data governance &amp; quality</strong> — provenance, acquisition, preparation, fitness for purpose.</li>
+        <li><strong>Bias/fairness, transparency, explainability, robustness, human oversight</strong> — the trustworthiness properties.</li>
+        <li><strong>Foundation-model &amp; third-party risk</strong> — supplier obligations flowed down the AI supply chain.</li>
+        <li><strong>The regulatory landscape</strong> — EU AI Act, NIST AI RMF, as context.</li>
+      </ul>
+
+      <div class="callout use"><div class="lbl">▹ Use case</div><p>Coming from a 27001 background, I'd map my existing lead-auditor competence onto 19011, then close the AI-specific gaps deliberately — a course plus hands-on familiarity with model documentation, data lineage, and bias testing — and keep an experience log the registration scheme will ask for at renewal.</p></div>
+      <div class="callout tmpl"><div class="lbl">▤ Template — auditor experience &amp; CPD log</div>
+        <pre>| Date    | Client (anon) | Standard | Role        | Stage        | Hours | CPD notes      |
+|---------|---------------|----------|-------------|--------------|-------|----------------|
+| 2026-05 | Client A      | 42001    | Team member | Stage 2      |  16   | Bias testing   |
+| 2026-09 | Client B      | 42001    | Lead        | Surveillance |  12   | Led team; AIA  |</pre></div>
+    </section>
+
+    <!-- 08 -->
+    <section class="note" id="s8">
+      <span class="sec-num">SECTION 08</span>
+      <h2>The Audit — order of operations</h2>
+      <p class="sub">Everything above exists so this can happen well. A certification audit follows this sequence; internal audits use the same skeleton at smaller scale. The AI difference shows up in what you sample and what you trace.</p>
+
+      <ol class="list">
+        <li><strong>Scoping &amp; role determination</strong> — confirm which AI systems and lifecycle stages are in scope and whether the org is a <em>provider</em>, <em>user</em>, or both; establish criteria (42001 + SoA + applicable legal/regulatory, e.g., EU AI Act where relevant); size the audit and decide standalone or integrated with 27001 / 27701 / 9001.</li>
+        <li><strong>Stage 1 (documentation)</strong> — review the AI policy (5.2), AI risk assessment and treatment (6.1.2/6.1.3), the SoA, the <em>AI system inventory</em>, the AI system impact assessments (6.1.4 process + 8.4 results), and data-governance documentation (provenance, quality, preparation); confirm internal audit (9.2) and management review (9.3) have happened; assess Stage 2 readiness.</li>
+        <li><strong>Planning</strong> — build the audit plan (schedule, sites, interviewees, sampling) with sampling justified across the AI lifecycle; prepare working papers mapped clause-by-clause and to the SoA.</li>
+        <li><strong>Stage 2 (implementation &amp; effectiveness)</strong> — opening meeting; sample across the AI lifecycle (model/system documentation, data provenance and quality, verification/validation, deployment controls); test <em>bias/fairness handling, transparency to users, human oversight, and monitoring of deployed models</em> (drift, incidents); assess third-party and foundation-model management; and <strong>trace: AI system → risk → impact assessment → controls → monitoring</strong>. Test control effectiveness, not just existence.</li>
+        <li><strong>Findings &amp; closing</strong> — evaluate evidence against criteria; classify nonconformities (major/minor) and note OFIs separately; agree findings at the closing meeting.</li>
+        <li><strong>Reporting &amp; decision</strong> — issue the report; the auditee submits correction + root-cause + corrective action; the auditor verifies effectiveness; an <em>independent</em> decision-maker (not the audit team) grants or withholds certification.</li>
+        <li><strong>Follow-up &amp; ongoing cycle</strong> — surveillance in years 1 &amp; 2 (partial scope), recertification in year 3 (whole AIMS), plus special/short-notice audits for major model changes, new AI systems, or incidents.</li>
+      </ol>
+
+      <h3>Nonconformity classification — the core skill</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Type</th><th>Definition</th><th>Typical AI examples</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Major</strong></td><td>Absence or total breakdown of a required process; a gap that raises significant doubt the AIMS can govern AI responsibly; or many minors against one requirement.</td><td>No AI system inventory; no impact assessments at all; the AI risk process undefined; SoA missing; a control claimed applicable but wholly unimplemented.</td></tr>
+          <tr><td><strong>Minor</strong></td><td>An isolated lapse that doesn't by itself break the system.</td><td>One AI system missing an impact assessment; a data-provenance record incomplete for one dataset; a single competence record absent.</td></tr>
+          <tr><td><strong>OFI</strong></td><td>Not a nonconformity — a weakness that could become one, or an improvement idea.</td><td>Monitoring exists but thresholds under-defined; the AIA template could better capture societal impact.</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3>Common AIMS nonconformities — the AI hot-spots</h3>
+      <ul>
+        <li><strong>No AI system inventory</strong> — shadow AI (tools adopted outside governance) never captured in scope.</li>
+        <li><strong>Missing or superficial AIAs</strong> — impact assessments absent, or not proportionate to the risk to people and society.</li>
+        <li><strong>Data-governance / provenance gaps</strong> — lineage undocumented, quality not assessed, preparation uncontrolled (A.7).</li>
+        <li><strong>Undefined human oversight</strong> — no meaningful human control or escalation for high-impact decisions.</li>
+        <li><strong>Unmanaged third-party / foundation-model risk</strong> — supplier obligations not flowed down (A.10).</li>
+        <li><strong>SoA not justified</strong> — inclusions/exclusions not traceable to the AI risk assessment or the role.</li>
+        <li><strong>No model monitoring / incident process</strong> — drift, performance and incidents not tracked; no incident-communication path (A.8.4).</li>
+      </ul>
+      <p>The 3-part rule for a defensible finding: state the <strong>requirement</strong> (clause/control), the <strong>evidence</strong> (what you saw, where, when, sample IDs), and the <strong>nonconformity</strong> (the specific gap). Don't put the fix in the finding — recommending solutions compromises impartiality. Grade on impact to the system, not on how easy it is to fix.</p>
+
+      <div class="callout use"><div class="lbl">▹ Use case</div><p>Planning a Stage 2, I allocate time to trace two real audit trails end-to-end — for a high-impact AI system, follow it from the risk register through its AIA, the applied Annex A controls, and into the monitoring records — and to reconcile the SoA against operating evidence. That trace is the highest-signal evidence for whether the AIMS actually governs AI.</p></div>
+      <div class="callout tmpl"><div class="lbl">▤ Templates — in the repo's <code>/templates</code> folder</div><p>Reusable, original starters I authored: <a href="templates/audit-plan.md">AIMS audit plan</a>, <a href="templates/audit-checklist.md">AIMS audit checklist</a>, <a href="templates/nonconformity-report.md">nonconformity report</a>, plus the <a href="templates/ai-risk-register.md">AI risk register</a>, <a href="templates/ai-system-impact-assessment.md">AI system impact assessment</a>, <a href="templates/ai-system-inventory.md">AI system inventory</a>, and <a href="templates/statement-of-applicability.md">Statement of Applicability</a>.</p></div>
+    </section>
+
+    <div class="foot" id="about">
+      <p><strong>About these notes.</strong> These are my own study notes and original examples, written from general knowledge of ISO/IEC 42001 and AI management as I learned the material. They are <strong>not affiliated with, derived from, or endorsed by any training provider</strong>, and they do not reproduce the ISO standard or any course materials. Clause <em>numbers</em>, control <em>identifiers</em>, and framework structure are referenced for orientation only — for normative requirements and control text, obtain the official <a href="https://www.iso.org/standard/81230.html" target="_blank" rel="noopener noreferrer">ISO/IEC 42001</a> standard from ISO. Templates are original starting points, not legal advice.</p>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById('repo-link').href = "https://github.com/SmittyStuff/iso-42001-lead-auditor-notes";
+  </script>
+</body>
+</html>
