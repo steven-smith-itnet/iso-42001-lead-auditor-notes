@@ -13,7 +13,7 @@ templates I built along the way.
 
 ## 🔗 Live notes
 
-**https://itnet-steven-smith.github.io/iso-42001-lead-auditor-notes/**
+**https://steven-smith-itnet.github.io/iso-42001-lead-auditor-notes/**
 
 ## 📚 Learning path (sections)
 
